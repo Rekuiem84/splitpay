@@ -3,9 +3,9 @@ import ArticleForm from "../components/ArticleForm.vue";
 import ArticleListe from "../components/ArticleListe.vue";
 import { ref } from "vue";
 
-let showAjouterArticle = ref(false);
-function openAjouterArticle() {
-	showAjouterArticle.value = !showAjouterArticle.value;
+let showAddArticle = ref(false);
+function openAddArticle() {
+	showAddArticle.value = !showAddArticle.value;
 }
 const emit = defineEmits([
 	"addArticle",
@@ -36,12 +36,12 @@ const { totalPrice } = defineProps(["totalPrice"]);
 			Articles
 			<button
 				class="button--add"
-				@click="openAjouterArticle"
-				:class="{ active: showAjouterArticle }">
+				@click="openAddArticle"
+				:class="{ active: showAddArticle }">
 				<i class="bx bx-plus"></i>
 			</button>
 		</p>
-		<ArticleForm v-show="showAjouterArticle" @addArticle="handleAddArticle" />
+		<ArticleForm v-show="showAddArticle" @addArticle="handleAddArticle" />
 		<ArticleListe
 			@incrementQuantity="handleIncrementQuantity"
 			@decrementQuantity="handleDecrementQuantity"

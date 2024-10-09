@@ -21,7 +21,10 @@ function handleAddMembre(membre) {
 	<div class="membres-cont">
 		<p class="titre__membre">
 			Membres
-			<button class="button--add" @click="toggleForm">
+			<button
+				class="button--add"
+				:class="{ active: showAddMembre }"
+				@click="toggleForm">
 				<i class="bx bx-plus"></i>
 			</button>
 		</p>
