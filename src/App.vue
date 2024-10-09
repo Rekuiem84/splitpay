@@ -2,8 +2,54 @@
 import MembresLayout from "./layouts/MembresLayout.vue";
 import ArticlesLayout from "./layouts/ArticlesLayout.vue";
 import { computed, provide, ref } from "vue";
+import Membre from "./models/Membre";
 
-let membres = ref(["Alpha", "Bravo", "Charlie", "Delta", "Echo"]);
+let membres = ref([
+	new Membre(
+		"Alpha",
+		[
+			{ nom: "Pizza", prix: 10, quantité: 2 },
+			{ nom: "Coca", prix: 2, quantité: 3 },
+		],
+		[{ nom: "Frites", prix: 5, quantité: 1 }],
+		[
+			{ nom: "Salade", prix: 3, quantité: 1 },
+			{ nom: "Glace", prix: 4, quantité: 1 },
+		]
+	),
+	new Membre(
+		"Bravo",
+		[],
+		[{ nom: "Pizza", prix: 10, quantité: 1 }],
+		[
+			{ nom: "Coca", prix: 2, quantité: 1 },
+			{ nom: "Frites", prix: 5, quantité: 1 },
+		]
+	),
+	new Membre(
+		"Charlie",
+		[{ nom: "Glace", prix: 4, quantité: 1 }],
+		[],
+		[
+			{ nom: "Pizza", prix: 10, quantité: 1 },
+			{ nom: "Coca", prix: 2, quantité: 2 },
+			{ nom: "Frites", prix: 5, quantité: 1 },
+			{ nom: "Salade", prix: 3, quantité: 1 },
+		]
+	),
+	new Membre(
+		"Delta",
+		[],
+		[],
+		[
+			{ nom: "Pizza", prix: 10, quantité: 1 },
+			{ nom: "Coca", prix: 2, quantité: 1 },
+			{ nom: "Frites", prix: 5, quantité: 1 },
+			{ nom: "Salade", prix: 3, quantité: 1 },
+			{ nom: "Glace", prix: 4, quantité: 1 },
+		]
+	),
+]);
 let articles = ref([
 	{ nom: "Pizza", prix: 10, quantité: 2 },
 	{ nom: "Coca", prix: 2, quantité: 3 },
@@ -72,8 +118,9 @@ const decrementQuantity = (articleNom) => {
 	}
 };
 
-const addMember = (member) => {
-	membres.value.push(member);
+const addMember = (membre) => {
+	let newMembre = new Membre(membre.value);
+	membres.value.push(newMembre);
 };
 
 const removeMember = (index) => {
@@ -84,7 +131,7 @@ const removeMember = (index) => {
 <template>
 	<h1>SplitPay - Gérez vos coûts en groupe</h1>
 	<div class="wrapper">
-		<MembresLayout />
+		<MembresLayout @addMembre="addMember" @removeMember="removeMember" />
 		<ArticlesLayout
 			@addArticle="addArticle"
 			@incrementQuantity="incrementQuantity"

@@ -1,24 +1,25 @@
 <script setup>
-let newMembre = "";
+import { ref } from "vue";
+
+const membre = ref("");
+
+const emit = defineEmits(["addMembre"]);
 
 function handleSubmit() {
-	addMembre(newMembre);
-	newMembre = "";
-}
-function clog() {
-	console.log("Membre ajouté");
+	emit("addMembre", membre);
+	membre.value = "";
 }
 </script>
 
 <template>
-	<form class="membres__form" @submit.prevent="clog()">
+	<form class="membres__form" @submit.prevent="handleSubmit">
 		<label for="membreNom">Nom</label>
 		<input
 			id="membreNom"
 			name="membreNom"
 			required
 			type="text"
-			v-model="newMembre"
+			v-model="membre"
 			placeholder="Nom" />
 		<button type="submit" class="button--cta">Ajouter membre</button>
 	</form>
@@ -29,7 +30,7 @@ function clog() {
 	max-width: 600px;
 	margin-block: 1rem;
 	padding: 0.5rem;
-	border-radius: 8px;
+	border-radius: 0.75rem;
 	display: grid;
 	grid-template-columns: auto 1fr auto;
 	align-items: center;

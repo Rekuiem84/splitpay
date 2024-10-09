@@ -1,10 +1,13 @@
 <script setup>
 import Membre from "./Membre.vue";
+import { inject, onMounted } from "vue";
+
+const membres = inject("membres");
 </script>
 
 <template>
 	<ul class="membres-list">
-		<Membre name="{membre}" />
+		<Membre v-for="(membre, index) in membres" :key="index" :nom="membre.nom" />
 	</ul>
 </template>
 

@@ -1,9 +1,11 @@
-<script setup></script>
+<script setup>
+const { nom } = defineProps(["nom"]);
+</script>
 
 <template>
 	<li class="membre">
 		<h2 class="membre__nom">
-			{name}
+			{{ nom }}
 			<button class="button--remove" @click="removeMembre(index)">
 				<i class="bx bx-x"></i>
 			</button>
@@ -19,7 +21,7 @@
 		<!-- <ul v-if="membre.nePayePas && membre.nePayePas.length > 0">
 			<li v-for="(article, indexArticle) in membre.nePayePas">
 				Patates
-				<button
+				<button 
 					class="button--remove"
 					@click="removeNePayePasArticle(membre.nom, indexArticle)">
 					<i class="bx bx-x"></i>
