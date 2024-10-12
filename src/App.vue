@@ -3,52 +3,13 @@ import MembresLayout from "./layouts/MembresLayout.vue";
 import ArticlesLayout from "./layouts/ArticlesLayout.vue";
 import { computed, provide, ref } from "vue";
 import Membre from "./models/Membre";
+import Modal from "./components/Modal.vue";
 
 let membres = ref([
-	new Membre(
-		"Alpha",
-		[
-			{ nom: "Pizza", prix: 10, quantité: 2 },
-			{ nom: "Coca", prix: 2, quantité: 3 },
-		],
-		[{ nom: "Frites", prix: 5, quantité: 1 }],
-		[
-			{ nom: "Salade", prix: 3, quantité: 1 },
-			{ nom: "Glace", prix: 4, quantité: 1 },
-		]
-	),
-	new Membre(
-		"Bravo",
-		[],
-		[{ nom: "Pizza", prix: 10, quantité: 1 }],
-		[
-			{ nom: "Coca", prix: 2, quantité: 1 },
-			{ nom: "Frites", prix: 5, quantité: 1 },
-		]
-	),
-	new Membre(
-		"Charlie",
-		[{ nom: "Glace", prix: 4, quantité: 1 }],
-		[],
-		[
-			{ nom: "Pizza", prix: 10, quantité: 1 },
-			{ nom: "Coca", prix: 2, quantité: 2 },
-			{ nom: "Frites", prix: 5, quantité: 1 },
-			{ nom: "Salade", prix: 3, quantité: 1 },
-		]
-	),
-	new Membre(
-		"Delta",
-		[],
-		[],
-		[
-			{ nom: "Pizza", prix: 10, quantité: 1 },
-			{ nom: "Coca", prix: 2, quantité: 1 },
-			{ nom: "Frites", prix: 5, quantité: 1 },
-			{ nom: "Salade", prix: 3, quantité: 1 },
-			{ nom: "Glace", prix: 4, quantité: 1 },
-		]
-	),
+	new Membre("Alpha", [], [], []),
+	new Membre("Bravo", [], [], []),
+	new Membre("Charlie", [], [], []),
+	new Membre("Delta", [], [], []),
 ]);
 let articles = ref([
 	{ nom: "Pizza", prix: 10, quantité: 2 },
@@ -66,10 +27,6 @@ const totalPrice = computed(() => {
 		(acc, article) => acc + article.prix * article.quantité,
 		0
 	);
-});
-
-const totalQuantity = computed(() => {
-	return articles.value.reduce((acc, article) => acc + article.quantité, 0);
 });
 
 const addArticle = (article) => {
@@ -118,20 +75,23 @@ const decrementQuantity = (articleNom) => {
 	}
 };
 
-const addMember = (membre) => {
+const addMembre = (membre) => {
 	let newMembre = new Membre(membre.value);
 	membres.value.push(newMembre);
 };
 
-const removeMember = (index) => {
-	membres.value.splice(index, 1);
-};
+let modalType = ref("");
+let showModal = ref(false);
+let selectedMembre = ref(null);
+provide("modalType", modalType);
+provide("showModal", showModal);
+provide("selectedMembre", selectedMembre);
 </script>
 
 <template>
 	<h1>SplitPay - Gérez vos coûts en groupe</h1>
 	<div class="wrapper">
-		<MembresLayout @addMembre="addMember" @removeMember="removeMember" />
+		<MembresLayout @addMembre="addMembre" />
 		<ArticlesLayout
 			@addArticle="addArticle"
 			@incrementQuantity="incrementQuantity"
@@ -139,4 +99,9 @@ const removeMember = (index) => {
 			@removeArticle="removeArticle"
 			:totalPrice="totalPrice" />
 	</div>
+	<Modal
+		v-if="showModal && selectedMembre !== null"
+		:modalType="modalType"
+		:membre="membres[selectedMembre]"
+		@closeModal="showModal = false" />
 </template>

@@ -9,11 +9,10 @@ const toggleForm = () => {
 	showAddMembre.value = !showAddMembre.value;
 };
 
-const emit = defineEmits(["addMembre"]);
+const emit = defineEmits(["addMembre", "openModal"]);
 
 function handleAddMembre(membre) {
 	emit("addMembre", membre);
-	// toggleForm();
 }
 </script>
 
