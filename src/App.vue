@@ -1,7 +1,7 @@
 <script setup>
 import MembresLayout from "./layouts/MembresLayout.vue";
 import ArticlesLayout from "./layouts/ArticlesLayout.vue";
-import { computed, provide, ref } from "vue";
+import { computed, provide, ref, watch } from "vue";
 import Membre from "./models/Membre";
 import Modal from "./components/Modal.vue";
 
@@ -29,6 +29,32 @@ const totalPrice = computed(() => {
 	);
 });
 
+const prixParMembre = computed(() => {
+	return (totalPrice.value / membres.value.length).toFixed(2);
+});
+
+const allArticlesNotPayeSeul = computed(() => {
+	return articles.value.filter(
+		(article) => !membres.value.some((m) => m.payeSeul.includes(article.nom))
+	);
+});
+
+const updateMembresArticles = (articleNom) => {
+	membres.value.forEach((membre) => {
+		membre.payeSeul = membre.payeSeul.filter((nom) => nom !== articleNom);
+		membre.nePayePas = membre.nePayePas.filter((nom) => nom !== articleNom);
+	});
+};
+
+watch(articles, () => {
+	// Met à jour allArticlesNotPayeSeul lorsque articles changent
+	allArticlesNotPayeSeul.value = articles.value.filter(
+		(article) => !membres.value.some((m) => m.payeSeul.includes(article.nom))
+	);
+});
+
+provide("allArticlesNotPayeSeul", allArticlesNotPayeSeul);
+
 const addArticle = (article) => {
 	if (
 		articles.value.some(
@@ -50,6 +76,7 @@ const removeArticle = (articleNom) => {
 	);
 	if (index !== -1) {
 		articles.value.splice(index, 1);
+		updateMembresArticles(articleNom);
 	}
 };
 
@@ -97,7 +124,8 @@ provide("selectedMembre", selectedMembre);
 			@incrementQuantity="incrementQuantity"
 			@decrementQuantity="decrementQuantity"
 			@removeArticle="removeArticle"
-			:totalPrice="totalPrice" />
+			:totalPrice="totalPrice"
+			:prixEquitable="prixParMembre" />
 	</div>
 	<Modal
 		v-if="showModal && selectedMembre !== null"

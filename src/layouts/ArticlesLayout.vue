@@ -27,7 +27,10 @@ function handleRemoveArticle(article) {
 	emit("removeArticle", article);
 }
 
-const { totalPrice } = defineProps(["totalPrice"]);
+const { totalPrice, prixEquitable } = defineProps([
+	"totalPrice",
+	"prixEquitable",
+]);
 </script>
 
 <template>
@@ -48,6 +51,9 @@ const { totalPrice } = defineProps(["totalPrice"]);
 			@removeArticle="handleRemoveArticle" />
 		<hr />
 		<p class="article__total">Total : {{ totalPrice }}€</p>
+		<p class="article__total" v-if="prixEquitable != Infinity">
+			Total équitable : {{ prixEquitable }}€
+		</p>
 	</div>
 </template>
 

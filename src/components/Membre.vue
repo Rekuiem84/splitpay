@@ -17,10 +17,10 @@ let showModal = inject("showModal");
 let modalType = inject("modalType");
 let selectedMembre = inject("selectedMembre");
 
-function openModal(type, id) {
+function toggleModal(type, id) {
 	modalType.value = type;
 	selectedMembre.value = id;
-	showModal.value = true;
+	showModal.value = showModal.value ? false : true;
 }
 
 function removeArticle(type, indexArticle) {
@@ -42,7 +42,9 @@ function removeArticle(type, indexArticle) {
 		</h2>
 		<h4>
 			Ne paye pas
-			<button class="button--increment" @click="openModal('nePayePas', index)">
+			<button
+				class="button--increment"
+				@click="toggleModal('nePayePas', index)">
 				<i class="bx bx-plus"></i>
 			</button>
 		</h4>
@@ -58,7 +60,7 @@ function removeArticle(type, indexArticle) {
 		</ul>
 		<h4>
 			Paye seul
-			<button class="button--increment" @click="openModal('payeSeul', index)">
+			<button class="button--increment" @click="toggleModal('payeSeul', index)">
 				<i class="bx bx-plus"></i>
 			</button>
 		</h4>
