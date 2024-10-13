@@ -146,7 +146,7 @@ label {
 		text-decoration: underline;
 	}
 }
-button {
+.button--cta {
 	font-size: 1.2rem;
 }
 </style>
