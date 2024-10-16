@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, defineProps } from "vue";
+import { inject, ref } from "vue";
 
 const allArticles = inject("articles");
 // tous les articles qui ne sont pas dans la liste paye seul des membres
