@@ -244,6 +244,12 @@ input:is([type="text"], [type="number"]) {
 	justify-content: space-between;
 	text-transform: capitalize;
 }
+.membre h2 {
+	margin-bottom: 0.2em;
+}
+.membre h4:nth-of-type(n + 2) {
+	margin-top: 0.25em;
+}
 
 .articles-cont hr {
 	margin-block: 0.8rem;
