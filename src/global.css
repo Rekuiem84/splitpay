@@ -250,6 +250,9 @@ input:is([type="text"], [type="number"]) {
 .membre h4:nth-of-type(n + 2) {
 	margin-top: 0.25em;
 }
+.membre li {
+	text-transform: capitalize;
+}
 
 .articles-cont hr {
 	margin-block: 0.8rem;
