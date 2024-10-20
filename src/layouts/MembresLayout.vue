@@ -8,12 +8,6 @@ let showAddMembre = ref(false);
 const toggleForm = () => {
 	showAddMembre.value = !showAddMembre.value;
 };
-
-const emit = defineEmits(["addMembre", "openModal"]);
-
-function handleAddMembre(membre) {
-	emit("addMembre", membre);
-}
 </script>
 
 <template>
@@ -27,7 +21,7 @@ function handleAddMembre(membre) {
 				<i class="bx bx-plus"></i>
 			</button>
 		</p>
-		<MembreForm v-show="showAddMembre" @addMembre="handleAddMembre" />
+		<MembreForm v-show="showAddMembre" />
 		<MembreListe />
 	</div>
 </template>

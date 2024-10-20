@@ -7,25 +7,6 @@ let showAddArticle = ref(false);
 function openAddArticle() {
 	showAddArticle.value = !showAddArticle.value;
 }
-const emit = defineEmits([
-	"addArticle",
-	"incrementQuantity",
-	"decrementQuantity",
-	"removeArticle",
-]);
-
-function handleAddArticle(article) {
-	emit("addArticle", article);
-}
-function handleIncrementQuantity(article) {
-	emit("incrementQuantity", article);
-}
-function handleDecrementQuantity(article) {
-	emit("decrementQuantity", article);
-}
-function handleRemoveArticle(article) {
-	emit("removeArticle", article);
-}
 
 const { totalPrice, prixEquitable } = defineProps([
 	"totalPrice",
@@ -44,11 +25,8 @@ const { totalPrice, prixEquitable } = defineProps([
 				<i class="bx bx-plus"></i>
 			</button>
 		</p>
-		<ArticleForm v-show="showAddArticle" @addArticle="handleAddArticle" />
-		<ArticleListe
-			@incrementQuantity="handleIncrementQuantity"
-			@decrementQuantity="handleDecrementQuantity"
-			@removeArticle="handleRemoveArticle" />
+		<ArticleForm v-show="showAddArticle" />
+		<ArticleListe />
 		<hr />
 		<p class="article__total">Total : {{ totalPrice }}€</p>
 		<p class="article__total" v-if="prixEquitable != Infinity">
