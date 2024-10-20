@@ -1,14 +1,18 @@
 <script setup>
-import { ref } from "vue";
+import Membre from "../models/Membre";
+import { ref, inject } from "vue";
 
 const membre = ref("");
-
-const emit = defineEmits(["addMembre"]);
+const membres = inject("membres");
 
 function handleSubmit() {
-	emit("addMembre", membre);
+	addMembre(membre);
 	membre.value = "";
 }
+const addMembre = (membre) => {
+	let newMembre = new Membre(membre.value);
+	membres.value.push(newMembre);
+};
 </script>
 
 <template>

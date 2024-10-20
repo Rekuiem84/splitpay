@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from "vue";
-const emit = defineEmits(["addArticle"]);
+import { ref, inject } from "vue";
+const articles = inject("articles");
+
 let articleNom = ref("");
 let articlePrix = ref("");
 let articleQuantite = ref("");
@@ -10,7 +11,7 @@ let errorMess = ref("");
 function handleSubmit() {
 	if (!checkValues()) return;
 
-	emit("addArticle", {
+	addArticle({
 		nom: articleNom.value,
 		prix: parseFloat(articlePrix.value),
 		quantité: parseInt(articleQuantite.value) || 1,
@@ -39,6 +40,20 @@ function checkValues() {
 	showErrorMess.value = false;
 	return true;
 }
+const addArticle = (article) => {
+	if (
+		articles.value.some(
+			(a) => a.nom.toLowerCase() === article.nom.toLowerCase()
+		)
+	) {
+		const index = articles.value.findIndex(
+			(a) => a.nom.toLowerCase() === article.nom.toLowerCase()
+		);
+		articles.value[index].quantité += article.quantité;
+	} else {
+		articles.value.push(article);
+	}
+};
 </script>
 
 <template>
