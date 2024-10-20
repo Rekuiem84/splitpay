@@ -39,72 +39,49 @@ const allArticlesNotPayeSeul = computed(() => {
 	);
 });
 
-const updateMembresArticles = (articleNom) => {
-	membres.value.forEach((membre) => {
-		membre.payeSeul = membre.payeSeul.filter((nom) => nom !== articleNom);
-		membre.nePayePas = membre.nePayePas.filter((nom) => nom !== articleNom);
-	});
-};
+const allArticlesPayeSeul = computed(() => {
+	return articles.value.filter((article) =>
+		membres.value.some((m) => m.payeSeul.includes(article.nom))
+	);
+});
 
 watch(articles, () => {
 	// Met à jour allArticlesNotPayeSeul lorsque articles changent
 	allArticlesNotPayeSeul.value = articles.value.filter(
 		(article) => !membres.value.some((m) => m.payeSeul.includes(article.nom))
 	);
+	allArticlesPayeSeul.value = articles.value.filter((article) =>
+		membres.value.some((m) => m.payeSeul.includes(article.nom))
+	);
 });
 
 provide("allArticlesNotPayeSeul", allArticlesNotPayeSeul);
 
-const addArticle = (article) => {
-	if (
-		articles.value.some(
-			(a) => a.nom.toLowerCase() === article.nom.toLowerCase()
-		)
-	) {
-		const index = articles.value.findIndex(
-			(a) => a.nom.toLowerCase() === article.nom.toLowerCase()
-		);
-		articles.value[index].quantité += article.quantité;
-	} else {
-		articles.value.push(article);
-	}
-};
+const calculerPrixParMembre = (membre) => {
+	let total = 0;
 
-const removeArticle = (articleNom) => {
-	const index = articles.value.findIndex(
-		(a) => a.nom.toLowerCase() === articleNom.toLowerCase()
-	);
-	if (index !== -1) {
-		articles.value.splice(index, 1);
-		updateMembresArticles(articleNom);
-	}
-};
-
-const incrementQuantity = (articleNom) => {
-	const index = articles.value.findIndex(
-		(a) => a.nom.toLowerCase() === articleNom.toLowerCase()
-	);
-	if (index !== -1) {
-		articles.value[index].quantité++;
-	}
-};
-
-const decrementQuantity = (articleNom) => {
-	const index = articles.value.findIndex(
-		(a) => a.nom.toLowerCase() === articleNom.toLowerCase()
-	);
-	if (index !== -1) {
-		if (articles.value[index].quantité > 1) {
-			articles.value[index].quantité--;
-		} else {
-			removeArticle(articleNom);
+	// Ajouter le prix des articles que le membre paye seul
+	membre.payeSeul.forEach((articleNom) => {
+		const article = articles.value.find((a) => a.nom === articleNom);
+		if (article) {
+			total += article.prix * article.quantité;
 		}
-	}
-};
+	});
 
-const addMembre = (membre) => {
-	let newMembre = new Membre(membre.value);
-	membres.value.push(newMembre);
+	// Ajouter le prix des articles partagés
+	allArticlesNotPayeSeul.value.forEach((article) => {
+		total += (article.prix * article.quantité) / membres.value.length;
+	});
+
+	// Retirer le prix des articles que le membre ne paye pas
+	membre.nePayePas.forEach((articleNom) => {
+		const article = articles.value.find((a) => a.nom === articleNom);
+		if (article) {
+			total -= (article.prix * article.quantité) / membres.value.length;
+		}
+	});
+
+	return total.toFixed(2);
 };
 
 let modalType = ref("");
@@ -118,14 +95,16 @@ provide("selectedMembre", selectedMembre);
 <template>
 	<h1>SplitPay - Gérez vos coûts en groupe</h1>
 	<div class="wrapper">
-		<MembresLayout @addMembre="addMembre" />
-		<ArticlesLayout
-			@addArticle="addArticle"
-			@incrementQuantity="incrementQuantity"
-			@decrementQuantity="decrementQuantity"
-			@removeArticle="removeArticle"
-			:totalPrice="totalPrice"
-			:prixEquitable="prixParMembre" />
+		<MembresLayout />
+		<ArticlesLayout :totalPrice="totalPrice" :prixEquitable="prixParMembre" />
+	</div>
+	<div>
+		<h2>Prix par membre</h2>
+		<ul>
+			<li v-for="membre in membres" :key="membre.id">
+				{{ membre.nom }} : {{ calculerPrixParMembre(membre) }}€
+			</li>
+		</ul>
 	</div>
 	<Modal
 		v-if="showModal && selectedMembre !== null"
