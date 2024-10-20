@@ -139,6 +139,8 @@ input[type="checkbox"] {
 }
 label {
 	display: inline-block;
+	text-transform: capitalize;
+	cursor: pointer;
 	flex: 1;
 	margin-left: 1rem;
 
