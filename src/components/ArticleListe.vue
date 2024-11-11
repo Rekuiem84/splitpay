@@ -6,20 +6,18 @@ import { inject } from "vue";
 const articles = inject("articles");
 const membres = inject("membres");
 
-const removeArticle = (articleNom) => {
+const updateArticlesPaye = (articleNom) => {
 	const index = articles.value.findIndex(
 		(a) => a.nom.toLowerCase() === articleNom.toLowerCase()
 	);
 	if (index !== -1) {
-		articles.value.splice(index, 1);
-		updateMembresArticles(articleNom);
+		articles.value[index].paye = [];
+		membres.value.forEach((membre) => {
+			if (membre.paye.includes(articleNom)) {
+				articles.value[index].paye.push(membre.id);
+			}
+		});
 	}
-};
-const updateMembresArticles = (articleNom) => {
-	membres.value.forEach((membre) => {
-		membre.payeSeul = membre.payeSeul.filter((nom) => nom !== articleNom);
-		membre.nePayePas = membre.nePayePas.filter((nom) => nom !== articleNom);
-	});
 };
 const incrementQuantity = (articleNom) => {
 	const index = articles.value.findIndex(
@@ -39,6 +37,16 @@ const decrementQuantity = (articleNom) => {
 		} else {
 			removeArticle(articleNom);
 		}
+		console.log(articles.value);
+	}
+};
+const removeArticle = (articleNom) => {
+	const index = articles.value.findIndex(
+		(a) => a.nom.toLowerCase() === articleNom.toLowerCase()
+	);
+	if (index !== -1) {
+		articles.value.splice(index, 1);
+		updateArticlesPaye(articleNom);
 	}
 };
 </script>
