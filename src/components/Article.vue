@@ -1,6 +1,4 @@
 <script setup>
-import { ref } from "vue";
-
 const { nom, prix, quantité } = defineProps(["nom", "prix", "quantité"]);
 
 const emit = defineEmits([
