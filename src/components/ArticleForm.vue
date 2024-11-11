@@ -1,5 +1,6 @@
 <script setup>
 import { ref, inject } from "vue";
+import Article from "../models/Article";
 const articles = inject("articles");
 
 let articleNom = ref("");
@@ -51,7 +52,9 @@ const addArticle = (article) => {
 		);
 		articles.value[index].quantité += article.quantité;
 	} else {
-		articles.value.push(article);
+		articles.value.push(
+			new Article(article.nom, article.prix, article.quantité)
+		);
 	}
 };
 </script>

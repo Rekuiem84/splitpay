@@ -7,10 +7,10 @@ import Article from "./models/Article";
 import Modal from "./components/Modal.vue";
 
 let membres = ref([
-	new Membre("Alpha", [], [], []),
-	new Membre("Bravo", [], [], []),
-	new Membre("Charlie", [], [], []),
-	new Membre("Delta", [], [], []),
+	new Membre("Alpha"),
+	new Membre("Bravo"),
+	new Membre("Charlie"),
+	new Membre("Delta"),
 ]);
 let articles = ref([
 	new Article("Pain", 1.5, 1),
@@ -18,7 +18,16 @@ let articles = ref([
 	new Article("Beurre", 2, 1),
 	new Article("Fromage", 3, 3),
 	new Article("Tomates", 2.5, 1),
+	new Article("Avocat", 1.5, 2),
 ]);
+onMounted(() => {
+	articles.value.forEach((article) => {
+		membres.value.forEach((membre) => {
+			article.paye.push(membre.id);
+		});
+	});
+});
+console.log(articles.value);
 
 provide("membres", membres);
 provide("articles", articles);
@@ -62,27 +71,27 @@ const calculerPrixParMembre = (membre) => {
 	let total = 0;
 
 	// Ajouter le prix des articles que le membre paye seul
-	membre.payeSeul.forEach((articleNom) => {
-		const article = articles.value.find((a) => a.nom === articleNom);
-		if (article) {
-			total += article.prix * article.quantité;
-		}
-	});
+	// membre.payeSeul.forEach((articleNom) => {
+	// 	const article = articles.value.find((a) => a.nom === articleNom);
+	// 	if (article) {
+	// 		total += article.prix * article.quantité;
+	// 	}
+	// });
 
-	// Ajouter le prix des articles partagés
-	allArticlesNotPayeSeul.value.forEach((article) => {
-		total += (article.prix * article.quantité) / membres.value.length;
-	});
+	// // Ajouter le prix des articles partagés
+	// allArticlesNotPayeSeul.value.forEach((article) => {
+	// 	total += (article.prix * article.quantité) / membres.value.length;
+	// });
 
-	// Retirer le prix des articles que le membre ne paye pas
-	membre.nePayePas.forEach((articleNom) => {
-		const article = articles.value.find((a) => a.nom === articleNom);
-		if (article) {
-			total -= (article.prix * article.quantité) / membres.value.length;
-		}
-	});
+	// // Retirer le prix des articles que le membre ne paye pas
+	// membre.nePayePas.forEach((articleNom) => {
+	// 	const article = articles.value.find((a) => a.nom === articleNom);
+	// 	if (article) {
+	// 		total -= (article.prix * article.quantité) / membres.value.length;
+	// 	}
+	// });
 
-	return total.toFixed(2);
+	// return total.toFixed(2);
 };
 
 let modalType = ref("");
