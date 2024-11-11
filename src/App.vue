@@ -1,8 +1,9 @@
 <script setup>
 import MembresLayout from "./layouts/MembresLayout.vue";
 import ArticlesLayout from "./layouts/ArticlesLayout.vue";
-import { computed, provide, ref, watch } from "vue";
+import { computed, provide, ref, watch, onMounted } from "vue";
 import Membre from "./models/Membre";
+import Article from "./models/Article";
 import Modal from "./components/Modal.vue";
 
 let membres = ref([
@@ -12,11 +13,11 @@ let membres = ref([
 	new Membre("Delta", [], [], []),
 ]);
 let articles = ref([
-	{ nom: "Pizza", prix: 10, quantité: 2 },
-	{ nom: "Coca", prix: 2, quantité: 3 },
-	{ nom: "Frites", prix: 5, quantité: 1 },
-	{ nom: "Salade", prix: 3, quantité: 1 },
-	{ nom: "Glace", prix: 4, quantité: 1 },
+	new Article("Pain", 1.5, 1),
+	new Article("Lait", 1, 2),
+	new Article("Beurre", 2, 1),
+	new Article("Fromage", 3, 3),
+	new Article("Tomates", 2.5, 1),
 ]);
 
 provide("membres", membres);
